@@ -1,0 +1,13 @@
+{
+    "name": "backend",
+    "version": "1.0.0",
+    "description": "FastAPI Backend Server",
+    "scripts": {
+        "dev": "python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000",
+        "start": "python -m uvicorn main:app --host 0.0.0.0 --port 8000",
+        "prod": "python -m uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
