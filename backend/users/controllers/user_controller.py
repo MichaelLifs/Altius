@@ -24,62 +24,40 @@ class UserController:
     
     async def login(
         self,
-        login_data: LoginRequest,
-        db: Session = Depends(get_db)
+        login_data: LoginRequest
     ) -> LoginResponse:
-        try:
-            from users.repositories.user_repository import UserRepository
-            
-            repository = UserRepository(db)
-            user = repository.get_by_email(login_data.email)
-            
-            if not user:
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="Invalid email or password"
-                )
-            
-            if not repository.verify_password(login_data.password, user.password):
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="Invalid email or password"
-                )
-            
-            token_data = {
-                "sub": str(user.id),
-                "email": user.email,
-                "user_id": user.id,
-                "role": user.role
-            }
-            token = create_access_token(data=token_data)
-            
-            from users.schemas.user_schemas import LoginUserResponse
-            user_response = LoginUserResponse(
-                id=user.id,
-                name=user.name,
-                last_name=user.last_name,
-                email=user.email,
-                role=user.role,
-                deleted=user.deleted,
-                created_at=user.created_at,
-                updated_at=user.updated_at,
-                is_verified=True,  # Default to True for existing users
-                token=token
-            )
-            
-            response = LoginResponse(
-                success=True,
-                message="Login successful",
-                data=user_response
-            )
-            return response
-        except HTTPException:
-            raise
-        except Exception as e:
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"An error occurred during login: {str(e)}"
-            )
+        # MOCK LOGIN - Always succeeds, no database check
+        from datetime import datetime
+        from users.schemas.user_schemas import LoginUserResponse
+        
+        # Create mock user data
+        token_data = {
+            "sub": "1",
+            "email": login_data.email,
+            "user_id": 1,
+            "role": "admin"
+        }
+        token = create_access_token(data=token_data)
+        
+        user_response = LoginUserResponse(
+            id=1,
+            name="Mock",
+            last_name="User",
+            email=login_data.email,
+            role="admin",
+            deleted=False,
+            created_at=datetime.now(),
+            updated_at=datetime.now(),
+            is_verified=True,
+            token=token
+        )
+        
+        response = LoginResponse(
+            success=True,
+            message="Login successful (MOCK)",
+            data=user_response
+        )
+        return response
     
     async def get_all_users(
         self,
