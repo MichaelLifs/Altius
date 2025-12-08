@@ -23,7 +23,7 @@ Full-stack application with React frontend and FastAPI backend for managing webs
    - Go to `backend` folder
    - Copy `.env.example` to `.env` (remove EXAMPLE)
 
-5. **Run the project:**
+4. **Run the project:**
 
    **Terminal 1 - Backend:**
 

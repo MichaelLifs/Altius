@@ -50,21 +50,5 @@ async def get_current_user(
     return payload
 
 
-def get_website_from_token(token: str) -> Optional[str]:
-    try:
-        payload = verify_token(token)
-        return payload.get("website")
-    except HTTPException:
-        return None
-
-
-async def require_website(website_id: str, current_user: dict = Depends(get_current_user)) -> dict:
-    user_website = current_user.get("website")
-    if user_website != website_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=f"Access denied. User is authenticated for {user_website}, not {website_id}"
-        )
-    return current_user
 
 
