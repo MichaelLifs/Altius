@@ -22,15 +22,6 @@ Full-stack application with React frontend and FastAPI backend for managing webs
 
    - Go to `backend` folder
    - Copy `.env.example` to `.env` (remove EXAMPLE)
-   - Edit `.env` and add your database connection details:
-     - `DATABASE_URL` - PostgreSQL connection string
-     - `SECRET_KEY` - JWT secret key for authentication
-
-4. **Setup database:**
-
-   - Make sure PostgreSQL is running
-   - Create a database named `altius_db` (or update `DATABASE_URL` in `.env`)
-   - Run database migrations/schema if needed
 
 5. **Run the project:**
 
