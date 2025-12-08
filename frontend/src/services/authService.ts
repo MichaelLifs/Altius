@@ -43,7 +43,9 @@ export const authService = {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `Server error: ${response.status}`);
+        throw new Error(
+          errorData.message || `Server error: ${response.status}`
+        );
       }
 
       const data: LoginResponse = await response.json();
@@ -56,7 +58,7 @@ export const authService = {
         const userData = { ...data.data };
         delete userData.token;
         localStorage.setItem("user", JSON.stringify(userData));
-        
+
         if (data.data.token) {
           localStorage.setItem("token", data.data.token);
         }
@@ -65,8 +67,10 @@ export const authService = {
       return data;
     } catch (error) {
       if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          throw new Error("Request timeout. Please check your connection and try again.");
+        if (error.name === "AbortError") {
+          throw new Error(
+            "Request timeout. Please check your connection and try again."
+          );
         }
         throw error;
       }

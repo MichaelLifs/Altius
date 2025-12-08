@@ -102,18 +102,54 @@ function WebsiteCredentialsPage() {
       if (response.success) {
         setResponseData(response)
         toast.success('Credentials submitted successfully!')
+        // Clear form fields after successful submission
+        setUsername('')
+        setPassword('')
+        setSelectedWebsite('')
+        setError('')
       } else {
         setError(response.message || 'Submission failed')
         toast.error(response.message || 'Submission failed')
+        // Clear all form fields after error to allow new input
+        setUsername('')
+        setPassword('')
+        setSelectedWebsite('')
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Submission failed'
+      
+      // Check if it's a session/auth token error (not invalid credentials) - if so, redirect to login
+      if (errorMessage === 'Session expired. Please login again.' || errorMessage.includes('No authentication token found')) {
+        // Clear all fields and error before redirecting
+        setUsername('')
+        setPassword('')
+        setSelectedWebsite('')
+        setError('')
+        setResponseData(null)
+        toast.error(errorMessage)
+        // Redirect to login
+        authService.logout()
+        navigate('/login')
+        return
+      }
+      
+      // For invalid credentials or other errors, just show the error and clear password field
+      
+      // For other errors, set error message and clear fields
       setError(errorMessage)
       
       if (errorMessage.includes('access') || errorMessage.includes('permission') || errorMessage.includes('403') || errorMessage.includes('FORBIDDEN')) {
         toast.error('You do not have permission to access this website. Please contact administrator.')
+        // Clear all form fields after permission error to allow new input
+        setUsername('')
+        setPassword('')
+        setSelectedWebsite('')
       } else {
         toast.error(errorMessage)
+        // Clear all form fields after error to allow new input
+        setUsername('')
+        setPassword('')
+        setSelectedWebsite('')
       }
     } finally {
       setSubmitting(false)
